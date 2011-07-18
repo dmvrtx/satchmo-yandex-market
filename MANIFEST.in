@@ -1,0 +1,2 @@
+recursive-include satchmo_yandex_market/templates *.html
+recursive-include satchmo_yandex_market/locale *.po *.mo

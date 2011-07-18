@@ -1,0 +1,49 @@
+{% autoescape on %}{% load yandex_market_product satchmo_price satchmo_util satchmo_currency satchmo_discounts satchmo_tax i18n thumbnail satchmo_category %}<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE yml_catalog SYSTEM "shops.dtd">
+<yml_catalog date="{{ date }}">
+    <shop>
+        <name>{{ site.name }}</name>
+        <company>{{ site.company }}</company>
+        <url>{{ site.url }}</url>
+
+        <currencies>
+            <currency id="RUR" rate="1" />
+        </currencies>
+
+        <categories>
+            {% with categories|dictsort:"id" as cats %} 
+            {% for category in cats %}<category id="{{ category.id }}"{% if category.parent %} parentId="{{ category.parent.id }}"{% endif %}>{{ category.translated_name }}</category>
+            {% endfor %}{% endwith %}
+        </categories>
+
+        <offers>
+            {% for product in offerproducts %}
+            {% with product|in_stock as in_stock %}
+            <offer available="{% if in_stock %}true{% else %}false{% endif %}">
+                <url>{{ site.url }}{{ product.get_absolute_url }}</url>
+                <price>{{ product|discount_price:sale|stringformat:"0.2f" }}</price>
+                <currencyId>RUR</currencyId>
+                <categoryId>{{ product.main_category.pk }}</categoryId>
+                {% with product.productimage_set.all|first as pic %}
+                {% thumbnail pic.picture "280x280" upscale="True" as image %}
+                <picture>{{ site.url }}{{ image.url }}</picture>
+                {% endthumbnail %}
+                {% endwith %}
+                <delivery>{% if product.is_shippable %}true{% else %}false{% endif %}</delivery>
+                <name>{{ product.translated_name|force_escape }}</name>
+                <description>{{ product.translated_description|escape|striptags }}</description>
+
+                {% with product|brand as brand %}
+                {% if brand %}<param name="{% trans "brand" %}">{{ brand.translation.name }}</param>{% endif %}
+                {% endwith %}
+                {% with product.translated_attributes as atts %}{% if atts %}
+                {% regroup atts by description as att_list %}
+                {% for att in att_list %}
+                <param name="{{ att.grouper|escape }}">{% for value in att.list %}{{ value.value|escape }}{% if value != att.list|last %}, {% endif %}{% endfor %}</param>
+                {% endfor %}{% endif %}{% endwith %}
+            </offer>
+            {% endwith %}
+            {% endfor %}
+        </offers>
+    </shop>
+</yml_catalog>{% endautoescape %}
