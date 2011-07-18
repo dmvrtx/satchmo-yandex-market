@@ -24,6 +24,7 @@ setup(
         'Development Status :: 4 - Beta',
         'Topic :: Internet :: WWW/HTTP',
         'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
         'Framework :: Django',
         ],
 )

@@ -13,3 +13,7 @@ class YandexMarketSite(models.Model):
     name = models.CharField(max_length=200, verbose_name=_('Name'))
     company = models.CharField(max_length=200, verbose_name=_('Company'))
     url = models.URLField(verbose_name=_('URL'))
+
+    class Meta:
+        verbose_name = _('Yandex.Market site')
+        verbose_name_plural = _('Yandex.Market sites')
