@@ -11,12 +11,13 @@ from satchmo_yandex_market.models import YandexMarketSite
 def offers(request, site=None):
     u"""Представление для списка товаров Яндекса"""
     site = get_object_or_404(YandexMarketSite, site=Site.objects.get_current())
+    categories = Category.objects.filter(is_active=True, site=site)
     ctx = RequestContext(request, {
             'date' : datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),
-            'categories' : Category.objects.filter(is_active=True,
-                site=site),
+            'categories' : categories,
             'offerproducts' : Product.objects.filter(active=True,
                 site = site,
+                category__in = categories,
                 productvariation__parent__isnull=True),
             'site' : site,
         })

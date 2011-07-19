@@ -1,10 +1,12 @@
 {% autoescape on %}{% load yandex_market_product satchmo_price satchmo_util satchmo_currency satchmo_discounts satchmo_tax i18n thumbnail satchmo_category %}<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE yml_catalog SYSTEM "shops.dtd">
-<yml_catalog date="{{ date }}">
+{% spaceless %}<yml_catalog date="{{ date }}">
     <shop>
         <name>{{ site.name }}</name>
         <company>{{ site.company }}</company>
         <url>{{ site.url }}</url>
+        <platform>Django / Satchmo</platform>
+        {% if site.email %}<email>{{ site.email }}</email>{% endif %}
 
         <currencies>
             <currency id="RUR" rate="1" />
@@ -32,6 +34,7 @@
                 <delivery>{% if product.is_shippable %}true{% else %}false{% endif %}</delivery>
                 <name>{{ product.translated_name|force_escape }}</name>
                 <description>{{ product.translated_description|escape|striptags }}</description>
+                {% if site.notes %}<sales_notes>{{ site.notes }}</sales_notes>{% endif %}
 
                 {% with product|brand as brand %}
                 {% if brand %}<param name="{% trans "brand" %}">{{ brand.translation.name }}</param>{% endif %}
@@ -46,4 +49,4 @@
             {% endfor %}
         </offers>
     </shop>
-</yml_catalog>{% endautoescape %}
+</yml_catalog>{% endspaceless %}{% endautoescape %}

@@ -13,6 +13,8 @@ class YandexMarketSite(models.Model):
     name = models.CharField(max_length=200, verbose_name=_('Name'))
     company = models.CharField(max_length=200, verbose_name=_('Company'))
     url = models.URLField(verbose_name=_('URL'))
+    email = models.EmailField(verbose_name=_('Email'), blank=True)
+    notes = models.CharField(max_length=1024, verbose_name=_('Notes'), blank=True)
 
     class Meta:
         verbose_name = _('Yandex.Market site')
