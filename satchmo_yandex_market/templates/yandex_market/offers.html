@@ -23,7 +23,7 @@
             {% with product|in_stock as in_stock %}
             <offer available="{% if in_stock %}true{% else %}false{% endif %}">
                 <url>{{ site.url }}{{ product.get_absolute_url }}</url>
-                <price>{{ product|discount_price:sale|stringformat:"0.2f" }}</price>
+                <price>{% if sale %}{{ product|discount_price:sale|stringformat:"0.2f" }}{% else %}{{ product|discount_price:""|stringformat:"0.2f" }}{% endif %}</price>
                 <currencyId>RUR</currencyId>
                 <categoryId>{{ product.main_category.pk }}</categoryId>
                 {% with product.productimage_set.all|first as pic %}
